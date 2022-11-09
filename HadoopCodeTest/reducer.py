@@ -12,12 +12,12 @@ for line in sys.stdin:
     try:
         count = int(count) # convert count (currently a string) to int
     except ValueError:
-    # count was not a number, so silently ignore/discard this line
-    continue
+        # count was not a number, so silently ignore/discard this line
+        continue
     # this IF-switch only works because Hadoop sorts map output
     # by key (here: word) before it is passed to the reducer
     if current_word == word:
-    current_count += count
+        current_count += count
     else:
         if current_word:
             # write result to STDOUT
