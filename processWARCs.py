@@ -17,6 +17,9 @@ from warcio.archiveiterator import ArchiveIterator
 inputDir  = sys.argv[1]
 outputDir = sys.argv[2]
 
+#inputDir = 'c:/Users/ANDRE/OneDrive/Desktop/CodeTest'
+#outputDir =  'c:/Users/ANDRE/OneDrive/Desktop/CodeTest'
+
 # change pwd
 print("script called with inputDir:", inputDir)
 print("script called with outputDir:", outputDir)
@@ -32,25 +35,31 @@ inputFiles = glob.glob('*warc*')
 
 
 def build_titles_df():
-    
-    print("Generating dataframe")
-    df = pd.DataFrame(columns=(['Title']))
-    
+
     with open(fileName, 'rb') as stream:
-            recordCounter = 0
-            for record in ArchiveIterator(stream):
-                    if record.rec_type == 'response':
-                        payload_content = record.raw_stream.read()
-                        soup             = BeautifulSoup(payload_content, 'html.parser')
-                        if (soup.title is not None):
-                            title = soup.title.string
-                            df.loc[recordCounter] = [title]
+    
+        print("Generating dataframe")
+        titles = []
 
-                    recordCounter += 1
+        recordCounter = 0
+        for record in ArchiveIterator(stream):
+                if record.rec_type == 'response':
+                    payload_content = record.raw_stream.read()
+                    soup             = BeautifulSoup(payload_content, 'html.parser')
+                    if (soup.title is not None):
+                        title = soup.title.string
+                        #df.loc[recordCounter] = [title]
 
-    df.head()
-    df.to_parquet(parquetFilePath)
+                        print(title)
+                        titles += [title]
+                recordCounter += 1
 
+        df = pd.DataFrame(columns=(['Title']))
+        df = pd.DataFrame(columns=(['Title']), data=titles)
+
+        df.head()
+        df.to_parquet(parquetFilePath)
+        del df
 
 
 # process files in the list
