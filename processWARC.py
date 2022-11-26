@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+# Author:       Andrey Norin
+# Title :       Process WARC - Extract page titles and save to Parquet files
+# Date Created: 11/12/2022
+# Date Updated: 11/26/2022
+# Update log: - fixed memory leak caused by beautiful soup with soup.decompose() and convert title to str()
+
 # take inputDir and outputDir as params
 
 import sys
@@ -48,11 +54,12 @@ def build_titles_df():
                     payload_content = record.raw_stream.read()
                     soup             = BeautifulSoup(payload_content, 'html.parser')
                     if (soup.title is not None):
-                        title = soup.title.string
+                        title = str(soup.title.string)
                         #df.loc[recordCounter] = [title]
 
                         #print(title)
                         titles += [title]
+                    soup.decompose()
                 recordCounter += 1
 
         df = pd.DataFrame(columns=(['Title']))
