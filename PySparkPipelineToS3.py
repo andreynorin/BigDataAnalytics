@@ -18,7 +18,7 @@ parDF2.count()
 parDF1 = parDF1.withColumn('index', f.monotonically_increasing_id())
 
 trainDataset    = parDF1
-predictDataset  = parDF2
+predictDataset  = parDF2.withColumnRenamed('Title','title')
 
 # splitting the dataset int 160k and 40k records for train/test
 trainDataset = parDF1.sort('index').limit(160000)
@@ -52,9 +52,9 @@ preds_df.show(20)
 
 # make predictions against CC-News-En dataset
 preds = bert_clf_pipelineModel.transform(predictDataset)
-preds_df = preds.select('topic','title','class.result')
+preds_df = preds.select('topic','Title','class.result')
 preds_df.count()
 preds_df.show(20)
 
 # export predictions to S3
-preds_df.write.format('parquet').option('header','true').save("s3a://litter-box/fromHDFS/predictions.parquet", mode='overwrite')
+preds_df.write.format('parquet').option('header','true').save("s3a://litter-box/fromHDFS/predictionsCCNews.parquet", mode='overwrite')
