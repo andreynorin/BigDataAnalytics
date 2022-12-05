@@ -8,9 +8,8 @@ export SPARK_HOME=/usr/lib/spark' >> $HOME/.bashrc && source $HOME/.bashrc
 
 sudo python3 -m pip install awscli boto spark-nlp sklearn spark-sklearn
 
-sudo yum  install git
+sudo yum install git
 
-git clone https://github.com/andreynorin/BigDataAnalytics.git
 
 set +x
 exit 0
