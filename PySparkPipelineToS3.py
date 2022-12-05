@@ -19,24 +19,26 @@ from pyspark.sql.functions import col,lit
 #tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/*.parquet")
 
 #this parquet file has 388014 records
-tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/tcilen6wu42p3p6m3q5n22m53u.parquet")
+#tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/tcilen6wu42p3p6m3q5n22m53u.parquet")
 
+# this parquet file has 1979830
+tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/bhbkh2jowm4ztp4bckxxuwsuje.parquet")
 tempDF1.count()
 
 #tempDF2=spark.read.parquet("hdfs:///CC-News-En-Titles-Clean-Data//*.parquet")
 
-# this file has 9194 records
+# this file has 9194 records with date field added
 tempDF2=spark.read.parquet("hdfs:///CC-News-En-Titles-Clean-Data//CC-NEWS-20160826132734-00001_ENG.clean.parquet")
 tempDF2.count()
 
 tempDF1 = tempDF1.withColumn('index', f.monotonically_increasing_id())
 
 trainDataset    = tempDF1
-predictDataset  = tempDF2.withColumn("topic", lit("some topic")).select(["topic","title"])
+predictDataset  = tempDF2.withColumn("topic", lit("some topic")).select(["topic","date","title"])
 
-# splitting the dataset int 160k and 40k records for train/test
-trainDataset = tempDF1.sort('index').limit(160000)
-testDataset = tempDF1.sort('index', ascending = False).limit(40000)
+# splitting the dataset int 1.8m and 0.1m records for train/test
+trainDataset = tempDF1.sort('index').limit(1800000)
+testDataset = tempDF1.sort('index', ascending = False).limit(100000)
 
 trainDataset.groupBy("topic").count().orderBy(col("count").desc()).show()
 testDataset.groupBy("topic").count().orderBy(col("count").desc()).show()
@@ -66,7 +68,7 @@ preds_df.show(20)
 
 # make predictions against CC-News-En dataset
 preds = bert_clf_pipelineModel.transform(predictDataset)
-preds_df = preds.select('topic','title','class.result')
+preds_df = preds.select('topic','date','title','class.result')
 preds_df.count()
 preds_df.show(20)
 
