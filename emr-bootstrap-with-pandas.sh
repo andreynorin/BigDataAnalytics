@@ -8,8 +8,5 @@ export SPARK_HOME=/usr/lib/spark' >> $HOME/.bashrc && source $HOME/.bashrc
 
 sudo python3 -m pip install awscli boto spark-nlp sklearn spark-sklearn
 
-sudo yum install git
-
-
 set +x
 exit 0
