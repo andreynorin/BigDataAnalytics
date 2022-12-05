@@ -1,3 +1,8 @@
+# my-job.py
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("PySparkPipelineToS3.py").getOrCreate()
+sc = spark.sparkContext
+
 # the following code is run in the PySpark prompt
 
 from sparknlp.base import *
