@@ -10,7 +10,7 @@ sudo python3 -m pip install awscli boto spark-nlp sklearn spark-sklearn
 
 sudo yum  install git
 
-git clone git@github.com:andreynorin/BigDataAnalytics.git
+git clone https://github.com/andreynorin/BigDataAnalytics.git
 
 set +x
 exit 0
