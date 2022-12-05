@@ -15,10 +15,18 @@ from pyspark.sql.functions import col
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col,lit
 
-tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/*.parquet")
+# this is for analyzing full datset
+#tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/*.parquet")
+
+#this parquet file has 388014 records
+tempDF1=spark.read.parquet("hdfs:///GoogleTrainingData/tcilen6wu42p3p6m3q5n22m53u.parquet")
+
 tempDF1.count()
 
-tempDF2=spark.read.parquet("hdfs:///CC-News-En-Titles-Clean-Data//*.parquet")
+#tempDF2=spark.read.parquet("hdfs:///CC-News-En-Titles-Clean-Data//*.parquet")
+
+# this file has 9194 records
+tempDF2=spark.read.parquet("hdfs:///CC-News-En-Titles-Clean-Data//CC-NEWS-20160826132734-00001_ENG.clean.parquet")
 tempDF2.count()
 
 tempDF1 = tempDF1.withColumn('index', f.monotonically_increasing_id())
@@ -27,8 +35,8 @@ trainDataset    = tempDF1
 predictDataset  = tempDF2.withColumn("topic", lit("some topic")).select(["topic","title"])
 
 # splitting the dataset int 160k and 40k records for train/test
-trainDataset = tempDF1.sort('index').limit(6000000)
-testDataset = tempDF1.sort('index', ascending = False).limit(300000)
+trainDataset = tempDF1.sort('index').limit(160000)
+testDataset = tempDF1.sort('index', ascending = False).limit(40000)
 
 trainDataset.groupBy("topic").count().orderBy(col("count").desc()).show()
 testDataset.groupBy("topic").count().orderBy(col("count").desc()).show()
