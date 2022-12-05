@@ -9,6 +9,7 @@ import subprocess
 import json
 import numpy as np
 import pandas as pd
+from datetime import datetime
 
 # parse passed in args
 inputDir  = sys.argv[1]
@@ -75,6 +76,11 @@ for fileName in inputFiles:
 
     # reset index
     df = df.reset_index(drop=True)
+
+    # add date column
+    dateStr    = fileName.split(sep='-')[2][:8]
+    fileDate   = (datetime.strptime(dateStr, '%Y%m%d'))
+    df['date'] = fileDate
 
     # write output file
     df.to_parquet(newFilePath)
