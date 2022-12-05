@@ -12,6 +12,7 @@ sudo yum install git -y
 git clone https://github.com/andreynorin/BigDataAnalytics.git
 cd BigDataAnalytics/
 chmod +x emr-stage-data-files-in-hdfs.sh
+./emr-stage-data-files-in-hdfs.sh
 
 spark-submit --master yarn --deploy-mode cluster PySparkPipelineToS3.py
 
