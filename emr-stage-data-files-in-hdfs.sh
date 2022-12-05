@@ -13,14 +13,14 @@ hdfs dfs -put * hdfs:///GoogleTrainingData
 
 cd ..
 
-echo "Downloading CC-News-Titles from S3"
-mkdir CC-News-En-Titles-Only
-cd CC-News-En-Titles-Only
-aws s3 cp s3://litter-box/CC-News-En-Titles-Only/ . --recursive
+echo "Downloading clean headline titles from CC-News-En-Titles-Clean-Data"
+mkdir CC-News-En-Titles-Clean-Data
+cd CC-News-En-Titles-Clean-Data
+aws s3 cp s3://litter-box/CC-News-En-Titles-Clean-Data/ . --recursive
 
 echo "Adding CC-News-En-Titles only to HDFS"
-hdfs dfs -mkdir hdfs:///CC-News-En-Titles-Only
-hdfs dfs -put * hdfs:///CC-News-En-Titles-Only
+hdfs dfs -mkdir hdfs:///CC-News-En-Titles-Clean-Data
+hdfs dfs -put * hdfs:///CC-News-En-Titles-Clean-Data
 hdfs dfs -mkdir hdfs:///PredictionResults
 
 echo "Displaying results"
